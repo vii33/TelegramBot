@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-TOKEN = os.getenv('TOKEN')
+TOKEN = os.getenv('TOKEN')  # comes as external var e.g. .env file
 
 # ---- Bot ----
 import requests
