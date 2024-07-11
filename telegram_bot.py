@@ -48,6 +48,7 @@ if __name__ == "__main__":
     # Retrieve updates
     updates = get_message_updates(TOKEN)
     print(updates)
+    print("-----------")
 
     # Retrieve chat ID
     chat_id = get_chat_id_from_message_response(updates)
