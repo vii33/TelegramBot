@@ -7,7 +7,7 @@ def load_bot_token_from_os() -> str:
     load_dotenv()
     return os.getenv('TOKEN')
 
-def get_updates(token:str):
+def get_message_updates(token:str):
     """
     Retrieve messages from Telegram bot.
     
@@ -17,6 +17,16 @@ def get_updates(token:str):
     url = f"https://api.telegram.org/bot{token}/getUpdates"
     response = requests.get(url).json()
     return response
+
+def get_chat_id_from_message_response(message_json:str):
+    try:
+        chat_id = message_json['result'][0]['message']['chat']['id']
+    except: 
+        raise Exception("Error: Unable to retrieve chat ID from message response. Maybe dict keys changed.")
+        chat_id = None
+
+    return chat_id
+
 
 def send_message(token:str, chat_id:int, message:str):
     """
@@ -36,14 +46,14 @@ if __name__ == "__main__":
     TOKEN = load_bot_token_from_os()
 
     # Retrieve updates
-    updates = get_updates(TOKEN)
+    updates = get_message_updates(TOKEN)
     print(updates)
 
     # Retrieve chat ID
-    chat_id = updates['result'][0]['message']['chat']['id']
+    chat_id = get_chat_id_from_message_response(updates)
     print(f"\n  CHAT ID: {chat_id}")
 
     # Send a message
-    message = "hello from your telegram bot 3\\. Dots have to be escaped! *Bold text*  __underline__   _italic text_"
+    message = "hello from your telegram bot 3\\. Dots have to be escaped in markdown mode\\! *Bold text*  __underline__   _italic text_"
     send_result = send_message(TOKEN, chat_id, message)
     print(f"Send result: {send_result}")
